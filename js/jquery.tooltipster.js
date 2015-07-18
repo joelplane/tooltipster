@@ -42,6 +42,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 			offsetX: 0,
 			offsetY: 0,
 			onlyOne: false,
+			parentElement: null,
 			position: 'top',
 			positionTracker: false,
 			positionTrackerCallback: function(origin){
@@ -94,6 +95,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		// for backward compatibility
 		this.options.iconTheme = this.options.iconTheme.replace('.', '');
 		this.options.theme = this.options.theme.replace('.', '');
+		
+		this.options.parentElement = this.options.parentElement && $(this.options.parentElement);
 		
 		// launch
 		
@@ -344,7 +347,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 						self._content_insert();
 						
 						// attach
-						self.$tooltip.appendTo('body');
+						self.$tooltip.appendTo(self.options.parentElement || 'body');
 						
 						// do all the crazy calculations and positioning
 						self.reposition();
@@ -1058,6 +1061,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 					// build out the arrow and append it		
 					var arrowConstruct = '<div class="'+ arrowClass +' tooltipster-arrow" style="'+ arrowReposition +'">'+ arrowBorder +'<span style="border-color:'+ arrowColor +';"></span></div>';
 					self.$tooltip.append(arrowConstruct);
+				}
+				
+				// the tooltip position calculated thus far is relative to the body element.
+				// if parent element is not body, offset the tooltip position by the parent element's position.
+				if (self.options.parentElement) {
+					var parentOffset = self.options.parentElement.offset();
+					myTop -= parentOffset.top;
+					myLeft -= parentOffset.left;
 				}
 				
 				// position the tooltip
