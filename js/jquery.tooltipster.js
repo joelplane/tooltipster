@@ -22,6 +22,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 			contentCloning: true,
 			debug: true,
 			delay: 200,
+			dontGoOffScreenY: true,
 			minWidth: 0,
 			maxWidth: null,
 			functionInit: function(origin, content) {},
@@ -876,6 +877,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				
 				// a function to detect if the tooltip is going off the screen vertically. If so, switch to the opposite!
 				function dontGoOffScreenY(switchTo, switchFrom) {
+					if (!self.options.dontGoOffScreenY) {
+					    return;
+					}
 					// if it goes off the top off the page
 					if(((proxy.offset.top - $(window).scrollTop() - tooltipHeight - offsetY - 12) < 0) && (switchFrom.indexOf('top') > -1)) {
 						practicalPosition = switchTo;
